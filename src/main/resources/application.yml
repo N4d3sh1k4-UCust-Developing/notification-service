@@ -30,5 +30,8 @@ spring:
 email:
   support: ${SUPPORT_EMAIL:support@ucust.com}
 
+url:
+  backend: ${BACKEND_URL:http://localhost:8180 }
+
 server:
   port: 8103
