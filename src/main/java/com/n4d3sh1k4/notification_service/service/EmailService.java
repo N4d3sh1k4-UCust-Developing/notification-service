@@ -20,8 +20,11 @@ import java.time.Instant;
 @Slf4j
 public class EmailService {
 
-    @Value("email.support")
+    @Value("${email.support}")
     String supportEmail;
+
+    @Value("${url.backend}")
+    String backendUrl;
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
@@ -29,7 +32,7 @@ public class EmailService {
     public void sendRegistrationEmail(String to, String username, String token, String accountActivationTokenTtl) {
         Context context = new Context();
         context.setVariable("username", username);
-        context.setVariable("activationUrl", "http://localhost:8180/api/v0/auth/confirm?token=" + token);
+        context.setVariable("activationUrl", backendUrl + "/api/v0/auth/confirm-email?token=" + token);
         context.setVariable("expiryMinutes", accountActivationTokenTtl);
         context.setVariable("supportEmail", supportEmail);
 
@@ -41,7 +44,7 @@ public class EmailService {
 
     public void sendResetPasswordEmail(String to, String token, String passwordResetTokenTtl) {
         Context context = new Context();
-        context.setVariable("activationUrl", "http://localhost:8180/reset-password?token=" + token);
+        context.setVariable("activationUrl", backendUrl + "/reset-password?token=" + token);
         context.setVariable("expiryMinutes", passwordResetTokenTtl);
         context.setVariable("supportEmail", supportEmail);
 
