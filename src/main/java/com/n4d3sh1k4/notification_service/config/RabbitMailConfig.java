@@ -1,6 +1,7 @@
 package com.n4d3sh1k4.notification_service.config;
 
 import com.n4d3sh1k4.notification_service.dto.AccountLockedMessage;
+import com.n4d3sh1k4.notification_service.dto.LoginMessage;
 import com.n4d3sh1k4.notification_service.dto.PasswordResetMessage;
 import com.n4d3sh1k4.notification_service.dto.NotificationEmailMessage;
 import org.springframework.amqp.core.Binding;
@@ -47,6 +48,11 @@ public class RabbitMailConfig {
     }
 
     @Bean
+    public Binding userLoginBinding(Queue mailQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(mailQueue).to(exchange).with("user.login.email");
+    }
+
+    @Bean
     public JacksonJsonMessageConverter messageConverter() {
         JacksonJsonMessageConverter converter = new JacksonJsonMessageConverter();
 
@@ -58,6 +64,7 @@ public class RabbitMailConfig {
         idClassMapping.put("com.n4d3sh1k4.security_service.dto.event.PasswordResetMessage", PasswordResetMessage.class);
         idClassMapping.put("com.n4d3sh1k4.security_service.dto.event.NotificationEmailMessage", NotificationEmailMessage.class);
         idClassMapping.put("com.n4d3sh1k4.security_service.dto.event.AccountLockedMessage", AccountLockedMessage.class);
+        idClassMapping.put("com.n4d3sh1k4.security_service.dto.event.LoginEvent", LoginMessage.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         converter.setJavaTypeMapper(typeMapper);

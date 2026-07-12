@@ -65,6 +65,20 @@ public class EmailService {
         sendHtmlEmail(to, "Сброс пароля", htmlContent);
     }
 
+    public void sendLoginEmail(String to, String ipAddress, String userAgent, Instant timestamp) {
+        Context context = new Context();
+        context.setVariable("email", to);
+        context.setVariable("ipAddress", ipAddress != null ? ipAddress : "неизвестен");
+        context.setVariable("userAgent", userAgent != null ? userAgent : "неизвестно");
+        context.setVariable("loginDate", timestamp);
+        context.setVariable("supportEmail", supportEmail);
+
+        String htmlContent = templateEngine.process("login-email", context);
+
+        sendHtmlEmail(to, "Новый вход в аккаунт", htmlContent);
+        log.info("Login notification email sent to {}", to);
+    }
+
     private void sendHtmlEmail(String to, String subject, String htmlContent) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
