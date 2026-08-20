@@ -75,8 +75,32 @@ public class EmailService {
 
         String htmlContent = templateEngine.process("login-email", context);
 
-        sendHtmlEmail(to, "Новый вход в аккаунт", htmlContent);
+        //sendHtmlEmail(to, "Новый вход в аккаунт", htmlContent);
         log.info("Login notification email sent to {}", to);
+    }
+
+    public void sendEmailChangeInitEmail(String to, String token) {
+        Context context = new Context();
+        context.setVariable("token", token);
+        String htmlContent = templateEngine.process("email-change-init", context);
+        sendHtmlEmail(to, "Запрос на смену email", htmlContent);
+        log.info("Email change init email sent to {}", to);
+    }
+
+    public void sendEmailChangeNewEmail(String to, String code) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        String htmlContent = templateEngine.process("email-change-new", context);
+        sendHtmlEmail(to, "Подтверждение новой почты", htmlContent);
+        log.info("Email change confirmation code sent to {}", to);
+    }
+
+    public void sendEmailChangeDoneEmail(String to) {
+        Context context = new Context();
+        context.setVariable("supportEmail", supportEmail);
+        String htmlContent = templateEngine.process("email-change-done", context);
+        sendHtmlEmail(to, "Email изменён", htmlContent);
+        log.info("Email change done notification sent to {}", to);
     }
 
     private void sendHtmlEmail(String to, String subject, String htmlContent) {

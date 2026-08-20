@@ -10,6 +10,9 @@ spring:
     username: ${RABBITMQ_USER:service-user}
     password: ${RABBITMQ_PASS:servicepassword}
     virtual-host: universal-host
+    listener:
+      simple:
+        default-requeue-rejected: false
     template:
       retry:
         enabled: true
